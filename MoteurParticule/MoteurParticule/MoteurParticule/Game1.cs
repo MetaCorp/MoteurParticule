@@ -19,11 +19,20 @@ namespace MoteurParticule
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        KeyboardState kbState, oldKbState;
+
         MoteurParticule moteurParticule1;
         List<Texture2D> Textures1;
 
         MoteurParticule moteurParticule2;
         List<Texture2D> Textures2;
+
+        enum Status { 
+            EnCours,
+            EnPause
+        }
+
+        Status statusJeu;
 
         public Game1()
         {
@@ -31,7 +40,7 @@ namespace MoteurParticule
             Content.RootDirectory = "Content";
 
             //this.graphics.IsFullScreen = true;
-
+            statusJeu = Status.EnCours;
             
         }
 
@@ -67,22 +76,24 @@ namespace MoteurParticule
             Textures1.Add(Content.Load<Texture2D>("diamond"));
             Textures1.Add(Content.Load<Texture2D>("star"));
 
-            moteurParticule1 = new MoteurParticule(Textures1, new Vector2(350, 300), new Vector2(0.001f, 0));
-            moteurParticule1.setAngle((float)(-Math.PI / 3), (float)(-Math.PI / 3));
-            moteurParticule1.setVitesse(1f, 2f, 0.0f);
-            moteurParticule1.setSize(10, 20, -0.0f);
+            moteurParticule1 = new MoteurParticule(Textures1, new Vector2(350, 300), new Vector2(0.00f, 0), new Vector2(0, 0.01f));
+            moteurParticule1.setAngle((float)(- 0 *Math.PI / 3), (float)(- 2 * Math.PI / 1));
+            moteurParticule1.setVitesse(1f, 2f, -0.005f);
+            moteurParticule1.setSize(10, 20, -0.1f);
 
 
             Textures2 = new List<Texture2D>();
 
-            for (int i = 0; i < 6; i++)
-                Textures2.Add(Content.Load<Texture2D>("red"));
+            Textures2.Add(Content.Load<Texture2D>("blue"));
             Textures2.Add(Content.Load<Texture2D>("green"));
+            //Textures2.Add(Content.Load<Texture2D>("red"));
 
-            moteurParticule2 = new MoteurParticule(Textures2, new Vector2(350, 300), new Vector2(0.01f, 0.0f));
-            moteurParticule2.setAngle((float)(-2 *Math.PI / 3), (float)(-1 * Math.PI / 10));
-            moteurParticule2.setVitesse(1f, 3f, -0.1f);
-            moteurParticule2.setSize(3, 8, 0.5f);
+            moteurParticule2 = new MoteurParticule(Textures2, new Vector2(350, 350), new Vector2(0.1f, -0.01f), new Vector2(0, 0.01f));
+            moteurParticule2.setAngle((float)(- 1 * Math.PI / 2), (float)(- 0.00 * Math.PI));
+            moteurParticule2.setVitesse(0.3f, 5f, 0.01f);
+            moteurParticule2.setSize(5, 30, 0.03f);
+
+            moteurParticule2.variationVent = new Vector2(0.01f, 0);
         }
 
         /// <summary>
@@ -106,8 +117,26 @@ namespace MoteurParticule
                 this.Exit();
 
             // TODO: Add your update logic here
-            moteurParticule1.Update();
-            moteurParticule2.Update();
+            //moteurParticule1.Update();
+            oldKbState = kbState;
+            kbState = Keyboard.GetState();
+
+            if (kbState.IsKeyDown(Keys.Space) && oldKbState.IsKeyUp(Keys.Space))
+            {
+                if (statusJeu == Status.EnCours)
+                    statusJeu = Status.EnPause;
+                else
+                    statusJeu = Status.EnCours;
+            }
+
+            
+            if (statusJeu == Status.EnCours)
+                moteurParticule2.Update();
+
+            if (moteurParticule2.Vent.X < -0.3)
+                moteurParticule2.variationVent.X = 0.008f;
+            else if (moteurParticule2.Vent.X > 0.3)
+                moteurParticule2.variationVent.X = -0.008f;
 
             base.Update(gameTime);
         }
@@ -130,8 +159,8 @@ namespace MoteurParticule
 
             spriteBatch.Begin();
 
-            //moteurParticule1.Draw(spriteBatch);
-
+            moteurParticule1.Draw(spriteBatch);
+            //
             spriteBatch.End();
 
             base.Draw(gameTime);

@@ -32,11 +32,17 @@ namespace MoteurParticule
         public float SizeMax { get; set; }
         public float VariationSize { get; set; }
 
-        List<Particule> Particules;
+        List<Particule> Particules { get; set; }
+
+        public int TTLMin { get; set; }
+        public int TTLMax { get; set; }
+        public int VariationTTL { get; set; }
+
+        public Vector2 variationVent;
 
         Random random = new Random();
 
-        public MoteurParticule(List<Texture2D> textures, Vector2 position, Vector2 vent)
+        public MoteurParticule(List<Texture2D> textures, Vector2 position, Vector2 vent, Vector2 gravite)
         {
             Textures = textures;
             Position = position;
@@ -44,7 +50,8 @@ namespace MoteurParticule
 
             Particules = new List<Particule>();
 
-            Gravite = new Vector2(0, 0.01f);
+            Gravite = gravite;
+            variationVent = new Vector2(0, 0);
         }
 
         public void setAngle(float angleMin, float angleMax)
@@ -68,6 +75,13 @@ namespace MoteurParticule
             VariationVitesse = variationVitesse;
         }
 
+        public void setTTL(int TTLMin, int TTLMax, int variationTTL)
+        {
+            this.TTLMin = TTLMin;
+            this.TTLMax = TTLMax;
+            VariationTTL = variationTTL;
+        }
+
         private Particule GenererNouvelleParticule()
         {
             Texture2D texture = Textures[random.Next(Textures.Count)];
@@ -79,7 +93,7 @@ namespace MoteurParticule
 
             float vitesse = (float)(VitesseMin + random.NextDouble() * VitesseMax);
 
-            int TTL = random.Next(20, 60) * 5;
+            int TTL = random.Next(TTLMin, TTLMax);
 
             float size = random.Next((int)SizeMin, (int)SizeMax);
 
@@ -91,6 +105,8 @@ namespace MoteurParticule
         public void Update()
         {
             int totale = 10;
+
+            Vent += variationVent;
 
             for (int i = 0; i < totale; i++)
                 Particules.Add(GenererNouvelleParticule());
