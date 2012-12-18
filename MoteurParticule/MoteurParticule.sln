@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoteurParticule", "MoteurParticule\MoteurParticule\MoteurParticule.csproj", "{58C274D1-195C-44A7-983A-477B4E2F0227}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MoteurParticuleContent", "MoteurParticule\MoteurParticuleContent\MoteurParticuleContent.contentproj", "{D16C1CF3-8000-45F7-9F48-CC90511DE098}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58C274D1-195C-44A7-983A-477B4E2F0227}.Debug|x86.ActiveCfg = Debug|x86
+		{58C274D1-195C-44A7-983A-477B4E2F0227}.Debug|x86.Build.0 = Debug|x86
+		{58C274D1-195C-44A7-983A-477B4E2F0227}.Release|x86.ActiveCfg = Release|x86
+		{58C274D1-195C-44A7-983A-477B4E2F0227}.Release|x86.Build.0 = Release|x86
+		{D16C1CF3-8000-45F7-9F48-CC90511DE098}.Debug|x86.ActiveCfg = Debug|x86
+		{D16C1CF3-8000-45F7-9F48-CC90511DE098}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
