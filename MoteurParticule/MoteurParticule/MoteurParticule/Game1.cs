@@ -20,6 +20,7 @@ namespace MoteurParticule
         SpriteBatch spriteBatch;
 
         KeyboardState kbState, oldKbState;
+        MouseState mouseState;
 
         MoteurParticule moteurParticule1;
         List<Texture2D> Textures1;
@@ -39,7 +40,7 @@ namespace MoteurParticule
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            //this.graphics.IsFullScreen = true;
+            this.graphics.IsFullScreen = true;
             statusJeu = Status.EnCours;
             
         }
@@ -77,23 +78,29 @@ namespace MoteurParticule
             Textures1.Add(Content.Load<Texture2D>("star"));
 
             moteurParticule1 = new MoteurParticule(Textures1, new Vector2(350, 300), new Vector2(0.00f, 0), new Vector2(0, 0.01f));
-            moteurParticule1.setAngle((float)(- 0 *Math.PI / 3), (float)(- 2 * Math.PI / 1));
-            moteurParticule1.setVitesse(1f, 2f, -0.005f);
+            moteurParticule1.setAngle((float)(- 0 *Math.PI / 3), (float)(- 1 * Math.PI / 1));
+            moteurParticule1.setVitesse(1f, 2f, -0.000f);
             moteurParticule1.setSize(10, 20, -0.1f);
 
 
             Textures2 = new List<Texture2D>();
 
+
+            //Textures2.Add(Content.Load<Texture2D>("circle"));
+            //Textures2.Add(Content.Load<Texture2D>("diamond"));
+            //Textures2.Add(Content.Load<Texture2D>("star"));
+
             Textures2.Add(Content.Load<Texture2D>("blue"));
             Textures2.Add(Content.Load<Texture2D>("green"));
-            //Textures2.Add(Content.Load<Texture2D>("red"));
+            Textures2.Add(Content.Load<Texture2D>("red"));
 
-            moteurParticule2 = new MoteurParticule(Textures2, new Vector2(350, 350), new Vector2(0.1f, -0.01f), new Vector2(0, 0.01f));
-            moteurParticule2.setAngle((float)(- 1 * Math.PI / 2), (float)(- 0.00 * Math.PI));
-            moteurParticule2.setVitesse(0.3f, 5f, 0.01f);
-            moteurParticule2.setSize(5, 30, 0.03f);
+            moteurParticule2 = new MoteurParticule(Textures2, new Vector2(350, 350), new Vector2(0.00f, -0.0f), new Vector2(0, 0.01f));
+            moteurParticule2.setAngle((float)(- 1 * Math.PI / 3), (float)(- 1 * Math.PI/3));
+            moteurParticule2.setVitesse(1f, 2f, 0.05f);
+            moteurParticule2.setSize(3, 10, 0.01f);
+            moteurParticule2.setTTL(80, 120, 0);
 
-            moteurParticule2.variationVent = new Vector2(0.01f, 0);
+            moteurParticule2.variationVent = new Vector2(0.00f, 0);
         }
 
         /// <summary>
@@ -121,6 +128,8 @@ namespace MoteurParticule
             oldKbState = kbState;
             kbState = Keyboard.GetState();
 
+            mouseState = Mouse.GetState();
+
             if (kbState.IsKeyDown(Keys.Space) && oldKbState.IsKeyUp(Keys.Space))
             {
                 if (statusJeu == Status.EnCours)
@@ -129,14 +138,18 @@ namespace MoteurParticule
                     statusJeu = Status.EnCours;
             }
 
-            
             if (statusJeu == Status.EnCours)
-                moteurParticule2.Update();
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                    moteurParticule2.GenererParticule(10);
 
-            if (moteurParticule2.Vent.X < -0.3)
+                moteurParticule2.Update(new Vector2(mouseState.X, mouseState.Y));
+            }
+
+            /*if (moteurParticule2.Vent.X < -0.3)
                 moteurParticule2.variationVent.X = 0.008f;
             else if (moteurParticule2.Vent.X > 0.3)
-                moteurParticule2.variationVent.X = -0.008f;
+                moteurParticule2.variationVent.X = -0.008f;*/
 
             base.Update(gameTime);
         }
