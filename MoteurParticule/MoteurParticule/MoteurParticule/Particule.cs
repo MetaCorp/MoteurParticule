@@ -56,8 +56,11 @@ namespace MoteurParticule
 
             Masse += variationSize;
 
-            Size += variationSize;
-            Size += Profondeur*0.02f;
+            if (Size >= 3 && Size <= 50)
+            {
+                Size += variationSize;
+                Size += Profondeur * 0.002f;
+            }
 
 
             Position += Direction * Vitesse;// *(float)Math.Pow(TTL - 30, 2f);

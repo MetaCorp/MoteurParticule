@@ -15,6 +15,8 @@ namespace MoteurParticule
     {
         public List<Texture2D> Textures { get; set; }
         public Vector2 Position { get; set; }
+        
+        public bool D3 { get; set; }
 
         public Vector2 Vent { get; set; }
         public Vector2 Gravite { get; set; }
@@ -40,15 +42,21 @@ namespace MoteurParticule
         public int TTLMax { get; set; }
         public int VariationTTL { get; set; }
 
+        public int NombreGeneration { get; set; }
+
         public Vector2 variationVent;
 
         Random random = new Random();
 
-        public MoteurParticule(List<Texture2D> textures, Vector2 position, Vector2 vent, Vector2 gravite)
+        public MoteurParticule(List<Texture2D> textures, Vector2 position, Vector2 vent, Vector2 gravite, int nbGeneration, bool d3)
         {
             Textures = textures;
             Position = position;
             Vent = vent;
+
+            D3 = d3;
+
+            NombreGeneration = nbGeneration;
 
             Particules = new List<Particule>();
 
@@ -100,9 +108,14 @@ namespace MoteurParticule
             float size = random.Next((int)SizeMin, (int)SizeMax);
 
             Color Color = new Color(random.Next(255), random.Next(255), random.Next(255));
-            float VariationProfondeur = (float)random.NextDouble() - 0.5f;
+            float VariationProfondeur;
 
-            return new Particule(texture, position, direction, vitesse, TTL, size, VariationProfondeur, generation, Color);
+            if (D3)
+                VariationProfondeur = (float)random.NextDouble() - 0.5f;
+            else
+                VariationProfondeur = 0;
+
+            return new Particule(texture, position, direction, vitesse, TTL, size, VariationProfondeur, generation, Color.White);
         }
 
         public void GenererParticule(Vector2 position, int totale, float angleMin, float angleMax, int TTLMin, int TTLMax, int generation)
@@ -129,8 +142,8 @@ namespace MoteurParticule
 
                 if (Particules[particule].TTL <= 0)
                 {
-                    if (Particules[particule].Generation < 1)
-                        GenererParticule(Particules[particule].Position , 100, (float)(- 0 * Math.PI / 3), (float)(- 6 * Math.PI/3), 10, 30, 1);
+                    if (Particules[particule].Generation < NombreGeneration)
+                        GenererParticule(Particules[particule].Position, 5, (float)(-0 * Math.PI / 3), (float)(-6 * Math.PI / 3), 40, 60, Particules[particule].Generation + 1);
                     Particules.RemoveAt(particule);
                 }
 			}
